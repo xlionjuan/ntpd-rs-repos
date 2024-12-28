@@ -27,7 +27,7 @@ curl -fsSl https://xlionjuan.github.io/ntpd-rs-repos/rpm/xlion-ntpd-rs-repo.repo
 Please make sure you know what you're doing!
 
 ```bash
- sudo systemctl mask systemd-timesyncd.service
+sudo systemctl mask systemd-timesyncd.service
 ```
 
 ```bash
