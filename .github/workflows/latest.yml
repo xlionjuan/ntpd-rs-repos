@@ -1,9 +1,9 @@
 name: Create Repo for ntpd-rs latest
 
 on:
-  # schedule:
-  #   # Every Saturday at 3AM UTC
-  #   - cron: "0 3 * * 6"
+  schedule:
+    # Runs at 20:00, on day 17 of the month
+    - cron: "0 20 17 * *"
   pull_request:
     branches:
       - main

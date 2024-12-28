@@ -19,3 +19,19 @@ echo "deb [signed-by=/usr/share/keyrings/xlion-repo.gpg] https://xlionjuan.githu
 ```bash
 curl -fsSl https://xlionjuan.github.io/ntpd-rs-repos/rpm/xlion-ntpd-rs-repo.repo | sudo tee /etc/yum.repos.d/xlion-ntpd-rs-repo.repo
 ```
+
+<details>
+<summary>Mask existing NTP ......</summary>
+<br>
+
+Please make sure you know what you're doing!
+
+```bash
+ sudo systemctl mask systemd-timesyncd.service
+```
+
+```bash
+sudo systemctl mask chronyd.service
+```
+
+</details>
