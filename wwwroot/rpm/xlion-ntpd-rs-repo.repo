@@ -2,6 +2,8 @@
 name=XLion ntpd-rs RPM repo
 baseurl=https://xlionjuan.github.io/ntpd-rs-repos/rpm
 enabled=1
+skip_if_unavailable=True
 gpgcheck=1
+repo_gpgcheck=1
 gpgkey=https://xlionjuan.github.io/ntpd-rs-repos/pubkey.key
 
