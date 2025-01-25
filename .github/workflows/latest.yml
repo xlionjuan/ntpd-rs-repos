@@ -67,6 +67,7 @@ jobs:
             GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
 
         - name: Sign RPMs
+          if: github.event_name != 'pull_request'
           run: rpm --addsign wwwroot/rpm/*.rpm
 
         - name: Create rpm repository
