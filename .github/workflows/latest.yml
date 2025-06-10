@@ -51,6 +51,18 @@ jobs:
           with:
             persist-credentials: false
 
+        - name: Download Keyring
+          shell: bash
+          run: |
+            url=$(curl -s https://api.github.com/repos/xlionjuan/xlion-repo-archive-keyring/releases/latest | jq -r '.assets[] | select(.name | endswith(".deb")) | .browser_download_url') && tmpfile="$(basename "$url")" && curl -L "$url" -o "$tmpfile"
+
+        - name: Verify Keyring
+          shell: bash
+          env:
+            GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          run: |
+            gh attestation verify --owner xlionjuan --predicate-type 'https://in-toto.io/attestation/release' xlion-repo-archive-keyring*
+
         - name: Download
           run: bash download.sh
 
@@ -78,6 +90,10 @@ jobs:
         - name: Sign rpm repository
           if: github.event_name != 'pull_request'
           run: gpg --detach-sign --armor wwwroot/rpm/repodata/repomd.xml
+
+        - name: Repackage
+          run: |
+            bash repackage.sh
 
         - name: Create apt repository
           uses: xlionjuan/apt-repo-action@6904bef9c1e836ccccaac1f541bacf8f58be66ff

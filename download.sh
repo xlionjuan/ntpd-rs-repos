@@ -25,4 +25,4 @@ echo "$PACKAGE_URLS"
 echo ""
 echo "-------------------DOWNLOADING------------------"
 
-wget $PACKAGE_URLS
+wget2 -P "ori" $PACKAGE_URLS
