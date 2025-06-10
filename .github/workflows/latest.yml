@@ -67,7 +67,7 @@ jobs:
           run: bash download.sh
 
         - name: Move .rpm to rpm folder
-          run: mv *.rpm wwwroot/rpm
+          run: mv ori/*.rpm wwwroot/rpm
 
         - name: Import GPG Key for signing RPMs
           if: github.event_name != 'pull_request'
