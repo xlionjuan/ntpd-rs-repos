@@ -14,9 +14,14 @@ sudo apt-get update && sudo apt-get install -y jq curl && url=$(curl -s https://
 ```
 
 ### Add repo
-
+<!--
 ```bash
 echo "deb [signed-by=/usr/share/keyrings/xlion-repo.gpg] https://xlionjuan.github.io/ntpd-rs-repos/apt main main" | sudo tee /etc/apt/sources.list.d/xlion-ntpd-rs-repo.list
+```
+-->
+
+```bash
+curl -fsSl https://xlionjuan.github.io/ntpd-rs-repos/apt/xlion-ntpd-rs-repo.sources | sudo tee /etc/apt/sources.list.d/xlion-ntpd-rs-repo.sources
 ```
 
 ## RPM
