@@ -6,16 +6,17 @@
 
 ## APT
 ### Add GPG key
-```
-curl -fsSL https://xlionjuan.github.io/ntpd-rs-repos/pubkey.key | sudo gpg --yes --dearmor --output /usr/share/keyrings/xlion-repo.gpg
-```
-
-### Add repo
 
 Please install [xlion-repo-archive-keyring](https://github.com/xlionjuan/xlion-repo-archive-keyring) package, you need to have `jq` and `curl` installed, this command will query GitHub API to get letest keyring package and install it. If you're mind installing by this way, please go to [its releases](https://github.com/xlionjuan/xlion-repo-archive-keyring/releases) and verify it with SHA256.
 
 ```
 sudo apt-get update && sudo apt-get install -y jq curl && url=$(curl -s https://api.github.com/repos/xlionjuan/xlion-repo-archive-keyring/releases/latest | jq -r '.assets[] | select(.name | endswith(".deb")) | .browser_download_url') && tmpfile="/tmp/$(basename "$url")" && curl -L "$url" -o "$tmpfile" && sudo dpkg -i "$tmpfile"
+```
+
+### Add repo
+
+```bash
+echo "deb [signed-by=/usr/share/keyrings/xlion-repo.gpg] https://xlionjuan.github.io/ntpd-rs-repos/apt main main" | sudo tee /etc/apt/sources.list.d/xlion-ntpd-rs-repo.list
 ```
 
 ## RPM
