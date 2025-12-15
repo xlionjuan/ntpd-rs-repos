@@ -23,12 +23,12 @@ echo "deb [signed-by=/usr/share/keyrings/xlion-repo.gpg] https://xlionjuan.githu
 -->
 
 ```bash
-curl -fsSl https://xlionjuan.github.io/ntpd-rs-repos/apt/xlion-ntpd-rs-repo.sources | sudo tee /etc/apt/sources.list.d/xlion-ntpd-rs-repo.sources
+curl -fsSL https://xlionjuan.github.io/ntpd-rs-repos/apt/xlion-ntpd-rs-repo.sources | sudo tee /etc/apt/sources.list.d/xlion-ntpd-rs-repo.sources
 ```
 
 ## RPM
 ```bash
-curl -fsSl https://xlionjuan.github.io/ntpd-rs-repos/rpm/xlion-ntpd-rs-repo.repo | sudo tee /etc/yum.repos.d/xlion-ntpd-rs-repo.repo
+curl -fsSL https://xlionjuan.github.io/ntpd-rs-repos/rpm/xlion-ntpd-rs-repo.repo | sudo tee /etc/yum.repos.d/xlion-ntpd-rs-repo.repo
 ```
 
 <details>
