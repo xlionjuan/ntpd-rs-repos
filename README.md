@@ -27,8 +27,21 @@ curl -fsSL https://xlionjuan.github.io/ntpd-rs-repos/apt/xlion-ntpd-rs-repo.sour
 ```
 
 ## RPM
+
 ```bash
 curl -fsSL https://xlionjuan.github.io/ntpd-rs-repos/rpm/xlion-ntpd-rs-repo.repo | sudo tee /etc/yum.repos.d/xlion-ntpd-rs-repo.repo
+```
+
+The fingerprint is:
+
+```
+1521 F219 00DB 3201 95AF A358 2BE8 3361 1FF6 0389
+```
+
+Pending rotated key: 
+
+```
+3E32 B16A 4821 C54B 53A2 58F2 8EBA 83B8 784E 3812
 ```
 
 <details>
