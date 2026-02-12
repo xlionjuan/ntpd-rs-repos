@@ -148,7 +148,7 @@ jobs:
 
         - name: Sign rpm repository
           if: github.event_name != 'pull_request'
-          run: gpg --detach-sign --armor~/.aptly/public/rpm/repodata/repomd.xml
+          run: gpg --detach-sign --armor ~/.aptly/public/rpm/repodata/repomd.xml
 
         - name: Publish apt repository
           run: |
