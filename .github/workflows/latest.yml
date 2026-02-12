@@ -141,7 +141,7 @@ jobs:
 
         - name: Sign RPMs
           if: github.event_name != 'pull_request'
-          run: rpm --addsign --key-id "$GPG_FINGERPRINT"  ~/.aptly/public/rpm/*.rpm
+          run: rpmsign --addsign --key-id "$GPG_FINGERPRINT"  ~/.aptly/public/rpm/*.rpm
 
         - name: Create rpm repository
           run: createrepo_c ~/.aptly/public/rpm
