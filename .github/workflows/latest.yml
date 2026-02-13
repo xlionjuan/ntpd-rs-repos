@@ -170,6 +170,7 @@ jobs:
           run: |
             mkdir -p /tmp/public
             cp -r ~/.aptly/public/* /tmp/public
+            mv -r /tmp/public/{dists,pool} /tmp/public/apt
 
         - name: Output summary
           run: |
