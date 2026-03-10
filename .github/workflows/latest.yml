@@ -51,9 +51,10 @@ jobs:
           with:
             persist-credentials: false
 
-        - name: Define workfolder for keyring
+        - name: Define workfolder for keyring and ntpd-rs
           run: |
             echo "WORKFOLDER_KEYRING=$(mktemp -p /tmp -d xlion-repo.XXXXX)" >> "$GITHUB_ENV"
+            echo "WORKFOLDER_NTPD_RS=$(mktemp -p /tmp -d xlion-repo.XXXXX)" >> "$GITHUB_ENV"
 
         - name: Bootstrap repo info for xlionjuan/xlion-repo-archive-keyring
           env:
@@ -81,10 +82,6 @@ jobs:
             GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           run: |
             gh attestation verify --owner xlionjuan --predicate-type 'https://in-toto.io/attestation/release' xlion-repo-archive-keyring*
-
-        - name: Define workfolder for ntpd-rs
-          run: |
-            echo "WORKFOLDER_NTPD_RS=$(mktemp -p /tmp -d xlion-repo.XXXXX)" >> "$GITHUB_ENV"
 
         - name: Bootstrap repo info for pendulum-project/ntpd-rs
           env:
