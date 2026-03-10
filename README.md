@@ -7,6 +7,10 @@
 
 > ntpd-rs is a tool for synchronizing your computer's clock, implementing the NTP and NTS protocols. It is written in Rust, with a focus on security and stability. It includes both client and server support.
 
+## Update frequency
+
+Every month on the 17th at 20:00 UTC.
+
 ## Architectures
 
 ### APT
