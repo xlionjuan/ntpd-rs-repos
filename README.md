@@ -2,7 +2,8 @@
 
 [![Create Repo for ntpd-rs latest](https://github.com/xlionjuan/ntpd-rs-repos/actions/workflows/latest.yml/badge.svg)](https://github.com/xlionjuan/ntpd-rs-repos/actions/workflows/latest.yml)
 
-***Unofficial*** repos for [pendulum-project/ntpd-rs](https://github.com/pendulum-project/ntpd-rs).
+> [!IMPORTANT]  
+> This is ***unofficial*** repos for [pendulum-project/ntpd-rs](https://github.com/pendulum-project/ntpd-rs), what I can say is *trust me bro*. It is your decision whether to trust me or not.
 
 > ntpd-rs is a tool for synchronizing your computer's clock, implementing the NTP and NTS protocols. It is written in Rust, with a focus on security and stability. It includes both client and server support.
 
