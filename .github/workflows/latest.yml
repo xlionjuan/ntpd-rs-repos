@@ -82,11 +82,35 @@ jobs:
           run: |
             gh attestation verify --owner xlionjuan --predicate-type 'https://in-toto.io/attestation/release' xlion-repo-archive-keyring*
 
-        - name: Download
-          run: bash download.sh
+        - name: Define workfolder for ntpd-rs
+          run: |
+            echo "WORKFOLDER_NTPD_RS=$(mktemp -p /tmp -d xlion-repo.XXXXX)" >> "$GITHUB_ENV"
+
+        - name: Bootstrap repo info for pendulum-project/ntpd-rs
+          env:
+            WORKFOLDER: ${{ env.WORKFOLDER_NTPD_RS }}
+          run: |
+            xlion-repo-utils-gh --workfolder $WORKFOLDER --repo pendulum-project/ntpd-rs
+
+        - name: Download ntpd-rs
+          env:
+            WORKFOLDER: ${{ env.WORKFOLDER_NTPD_RS }}
+          run: |
+            cd $WORKFOLDER
+            cat dl_urls.txt | grep -E '\.deb$|\.rpm$' | wget2 --input-file=-
+            xlion-repo-utils-gh --verify --workfolder $WORKFOLDER
+
+        - name: Copy ntpd-rs packages to current folder
+          env:
+            WORKFOLDER: ${{ env.WORKFOLDER_NTPD_RS }}
+          run: |
+            cp -r $WORKFOLDER/*.deb .
+            cp -r $WORKFOLDER/*.rpm .
 
         - name: Move .rpm to rpm folder
-          run: mv *.rpm wwwroot/rpm
+          run: |
+            mkdir -p wwwroot/rpm
+            mv *.rpm wwwroot/rpm
 
         - name: Initialize apt repository
           run: |
