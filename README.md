@@ -7,7 +7,7 @@
 
 > ntpd-rs is a tool for synchronizing your computer's clock, implementing the NTP and NTS protocols. It is written in Rust, with a focus on security and stability. It includes both client and server support.
 
-This repo uses [xlionjuan/fedora-createrepo-image](https://github.com/xlionjuan/fedora-createrepo-image) and [xlion-repo-utils-gh](https://github.com/xlionjuan/fedora-createrepo-image/blob/main/scripts/xlion-repo-utils-gh) to create repo, and deploy to GitHub Pages.
+This repo uses [xlionjuan/fedora-createrepo-image](https://github.com/xlionjuan/fedora-createrepo-image) and [aptly](https://github.com/aptly-dev/aptly) for APT repo and [createrepo_c](https://github.com/rpm-software-management/createrepo_c) for RPM repo, and deploy to GitHub Pages.
 
 The download and verification logic is handled by [xlion-repo-utils-gh](https://github.com/xlionjuan/fedora-createrepo-image/blob/main/scripts/xlion-repo-utils-gh), which fetches release data, downloads packages, and verifies SHA256 checksums.
 
