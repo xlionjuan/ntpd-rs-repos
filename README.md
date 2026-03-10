@@ -61,7 +61,7 @@ Pending rotated key:
 ```
 
 <details>
-<summary>Mask existing NTP ......</summary>
+<summary>Mask existing NTP services</summary>
 <br>
 
 Please make sure you know what you're doing!
