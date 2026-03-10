@@ -51,10 +51,29 @@ jobs:
           with:
             persist-credentials: false
 
-        - name: Download Keyring
-          shell: bash
+        - name: Define workfolder for keyring
           run: |
-            url=$(curl -s https://api.github.com/repos/xlionjuan/xlion-repo-archive-keyring/releases/latest | jq -r '.assets[] | select(.name | endswith(".deb")) | .browser_download_url') && tmpfile="$(basename "$url")" && curl -L "$url" -o "$tmpfile"
+            echo "WORKFOLDER_KEYRING=$(mktemp -p /tmp -d xlion-repo.XXXXX)" >> "$GITHUB_ENV"
+
+        - name: Bootstrap repo info for xlionjuan/xlion-repo-archive-keyring
+          env:
+            WORKFOLDER: ${{ env.WORKFOLDER_KEYRING }}
+          run: |
+            xlion-repo-utils-gh --workfolder $WORKFOLDER --repo xlionjuan/xlion-repo-archive-keyring
+
+        - name: Download keyring
+          env:
+            WORKFOLDER: ${{ env.WORKFOLDER_KEYRING }}
+          run: |
+            cd $WORKFOLDER
+            cat dl_urls.txt | wget2 --input-file=-
+            xlion-repo-utils-gh --verify --workfolder $WORKFOLDER
+
+        - name: Copy keyring to current folder
+          env:
+            WORKFOLDER: ${{ env.WORKFOLDER_KEYRING }}
+          run: |
+            cp -r $WORKFOLDER/*.deb .
 
         - name: Verify Keyring
           shell: bash
