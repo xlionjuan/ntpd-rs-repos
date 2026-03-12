@@ -25,6 +25,10 @@ env:
 permissions:
   contents: read    
 
+defaults:
+  run:
+    shell: bash
+
 jobs:
     verify:
       name: Verify container
@@ -35,6 +39,7 @@ jobs:
 
         - name: Verify
           run: |
+            set -euo pipefail
             cosign verify --rekor-url=https://rekor.sigstore.dev \
             --certificate-identity-regexp "https://github.com/xlionjuan/.*" \
             --certificate-oidc-issuer "https://token.actions.githubusercontent.com" \
@@ -53,6 +58,7 @@ jobs:
 
         - name: Define workfolder for keyring and ntpd-rs
           run: |
+            set -euo pipefail
             echo "WORKFOLDER_KEYRING=$(mktemp -p /tmp -d xlion-repo.XXXXX)" >> "$GITHUB_ENV"
             echo "WORKFOLDER_NTPD_RS=$(mktemp -p /tmp -d xlion-repo.XXXXX)" >> "$GITHUB_ENV"
 
@@ -60,12 +66,14 @@ jobs:
           env:
             WORKFOLDER: ${{ env.WORKFOLDER_KEYRING }}
           run: |
+            set -euo pipefail
             xlion-repo-utils-gh --workfolder $WORKFOLDER --repo xlionjuan/xlion-repo-archive-keyring
 
         - name: Download keyring
           env:
             WORKFOLDER: ${{ env.WORKFOLDER_KEYRING }}
           run: |
+            set -euo pipefail
             cd $WORKFOLDER
             cat dl_urls.txt | wget2 --input-file=-
             xlion-repo-utils-gh --verify --workfolder $WORKFOLDER
@@ -74,25 +82,28 @@ jobs:
           env:
             WORKFOLDER: ${{ env.WORKFOLDER_KEYRING }}
           run: |
+            set -euo pipefail
             cp -r $WORKFOLDER/*.deb .
 
         - name: Verify Keyring
-          shell: bash
           env:
             GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           run: |
+            set -euo pipefail
             gh attestation verify --owner xlionjuan --predicate-type 'https://in-toto.io/attestation/release' xlion-repo-archive-keyring*
 
         - name: Bootstrap repo info for pendulum-project/ntpd-rs
           env:
             WORKFOLDER: ${{ env.WORKFOLDER_NTPD_RS }}
           run: |
+            set -euo pipefail
             xlion-repo-utils-gh --workfolder $WORKFOLDER --repo pendulum-project/ntpd-rs
 
         - name: Download ntpd-rs
           env:
             WORKFOLDER: ${{ env.WORKFOLDER_NTPD_RS }}
           run: |
+            set -euo pipefail
             cd $WORKFOLDER
             cat dl_urls.txt | grep -E '\.deb$|\.rpm$' | wget2 --input-file=-
             xlion-repo-utils-gh --verify --workfolder $WORKFOLDER
@@ -101,16 +112,19 @@ jobs:
           env:
             WORKFOLDER: ${{ env.WORKFOLDER_NTPD_RS }}
           run: |
+            set -euo pipefail
             cp -r $WORKFOLDER/*.deb .
             cp -r $WORKFOLDER/*.rpm .
 
         - name: Move .rpm to rpm folder
           run: |
+            set -euo pipefail
             mkdir -p wwwroot/rpm
             mv *.rpm wwwroot/rpm
 
         - name: Initialize apt repository
           run: |
+            set -euo pipefail
             aptly repo create \
               -component=${{ env.COMPONENTS }} \
               -distribution=${{ env.DISTRIBUTION }} \
@@ -118,15 +132,18 @@ jobs:
 
         - name: Add .deb to apt repository
           run: |
+            set -euo pipefail
             aptly repo add repo-target .
 
         - name: Copy wwwroot to aptly public folder
           run: |
+            set -euo pipefail
             mkdir -p  $HOME/.aptly/public
             cp -r wwwroot/* $HOME/.aptly/public
 
         - name: Output summary
           run: |
+            set -euo pipefail
             echo "## Aptly repo summary" >> "$GITHUB_STEP_SUMMARY"
             echo '```' >> "$GITHUB_STEP_SUMMARY"
             aptly repo show -with-packages repo-target >> "$GITHUB_STEP_SUMMARY"
@@ -154,7 +171,6 @@ jobs:
             path: ~/.aptly
 
         - name: Prepare ephemeral GPG home
-          shell: bash
           run: |
             set -euo pipefail
             umask 077
@@ -162,7 +178,6 @@ jobs:
             echo "GPG_TTY=" >> "$GITHUB_ENV"
 
         - name: Import GPG Key
-          shell: bash
           run: |
             set -euo pipefail
             umask 077
@@ -181,17 +196,24 @@ jobs:
 
         - name: Sign RPMs
           if: github.event_name != 'pull_request'
-          run: rpmsign --addsign --key-id "$GPG_FINGERPRINT" ~/.aptly/public/rpm/*.rpm
+          run: |
+            set -euo pipefail
+            rpmsign --addsign --key-id "$GPG_FINGERPRINT" ~/.aptly/public/rpm/*.rpm
 
         - name: Create rpm repository
-          run: createrepo_c ~/.aptly/public/rpm
+          run: |
+            set -euo pipefail
+            createrepo_c ~/.aptly/public/rpm
 
         - name: Sign rpm repository
           if: github.event_name != 'pull_request'
-          run: gpg --detach-sign --armor ~/.aptly/public/rpm/repodata/repomd.xml
+          run: |
+            set -euo pipefail
+            gpg --detach-sign --armor ~/.aptly/public/rpm/repodata/repomd.xml
 
         - name: Publish apt repository
           run: |
+            set -euo pipefail
             aptly publish repo \
               -distribution=${{ env.DISTRIBUTION }} \
               -component=${{ env.COMPONENTS }} \
@@ -204,16 +226,19 @@ jobs:
         - name: Clean up
           if: always()
           run: |
+            set -euo pipefail
             rm -rf "$GNUPGHOME" || true
 
         - name: Ensure publish path has no '.'
           run: |
+            set -euo pipefail
             mkdir -p /tmp/public
             cp -r ~/.aptly/public/* /tmp/public
             mv /tmp/public/{dists,pool} /tmp/public/apt
 
         - name: Output summary
           run: |
+            set -euo pipefail
             echo "## Final published folder structure" >> "$GITHUB_STEP_SUMMARY"
             echo '```' >> "$GITHUB_STEP_SUMMARY"
             tree /tmp/public >> "$GITHUB_STEP_SUMMARY"
