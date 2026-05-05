@@ -191,13 +191,13 @@ jobs:
         - name: Create rpm repository
           run: |
             set -euo pipefail
-            createrepo_c ~/.aptly/public/rpm
+            xlion-repo-rpm-createrepo --dir ~/.aptly/public/rpm
 
         - name: Sign rpm repository
           if: github.event_name != 'pull_request'
           run: |
             set -euo pipefail
-            gpg --detach-sign --armor ~/.aptly/public/rpm/repodata/repomd.xml
+            xlion-repo-rpm-sign-repomd --dir ~/.aptly/public/rpm --gpg-key "$GPG_FINGERPRINT"
 
         - name: Publish apt repository
           run: |
