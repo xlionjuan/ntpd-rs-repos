@@ -186,7 +186,7 @@ jobs:
           if: github.event_name != 'pull_request'
           run: |
             set -euo pipefail
-            rpmsign --addsign --key-id "$GPG_FINGERPRINT" ~/.aptly/public/rpm/*.rpm
+            xlion-repo-rpm-sign-packages --dir ~/.aptly/public/rpm --gpg-key "$GPG_FINGERPRINT"
 
         - name: Create rpm repository
           run: |
