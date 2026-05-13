@@ -43,6 +43,7 @@ jobs:
           id: get-digest
           run: |
             DIGEST=$(skopeo inspect --format '{{.Digest}}' docker://ghcr.io/xlionjuan/fedora-createrepo-image:latest)
+            echo "Resolved digest: ${DIGEST}"
             echo "digest=${DIGEST}" >> "$GITHUB_OUTPUT"
 
         - name: Verify
